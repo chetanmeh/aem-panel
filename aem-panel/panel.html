@@ -65,10 +65,19 @@
                 <li class="tabbed-pane-header-tab">
                   <a href="#tab-log" class="tabbed-pane-header-tab-title">Log</a>
                 </li>
+                <!-- Request Progress -->
+                <li class="tabbed-pane-header-tab">
+                  <a href="#tab-request-progress" class="tabbed-pane-header-tab-title">Request Progress</a>
+                </li>
                 <!-- Queries Tab -->
                 <li class="tabbed-pane-header-tab">
                   <a href="#tab-queries" class="tabbed-pane-header-tab-title">Queries</a>
                 </li>
+                <!-- Timing -->
+                <li class="tabbed-pane-header-tab">
+                  <a href="#tab-timing" class="tabbed-pane-header-tab-title">Timing</a>
+                </li>
+
               </ul>
             </div>
           </div>
@@ -90,6 +99,15 @@
               </table>
             </div>
 
+            <!-- Request Progress Tab Panel -->
+            <div id="tab-request-progress">
+              <table id="request-progress">
+                <tr>
+                  <td>Split out from Logs</td>
+                </tr>
+              </table>
+            </div>
+
             <!-- Queries Tab Panel -->
             <div id="tab-queries">
               <table id="queries">
@@ -98,6 +116,16 @@
                 </tr>
               </table>
             </div>
+
+            <!-- Timing Tab Panel -->
+            <div id="tab-timing">
+              <table id="timing">
+                <tr>
+                  <td>Derived from Request Progress data</td>
+                </tr>
+              </table>
+            </div>
+
           </div>
         </div>
       </div>
