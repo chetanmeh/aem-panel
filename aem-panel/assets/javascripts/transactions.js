@@ -48,9 +48,8 @@ function TransactionsCtrl($scope) {
     return (transactionId === $scope.activeKey) ? 'selected' : '';
   };
 
-
   $scope.processTransaction = function(transaction, data) {
-    $scope.transactionKeys.push(transaction.key);
+    $scope.transactionKeys.unshift(transaction.key);
     $scope.transactionMap[transaction.key] = transaction;
 
     angular.forEach(data, function(value, dataType) {
