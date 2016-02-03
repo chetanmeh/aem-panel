@@ -28,29 +28,6 @@ function getSlingTracerJSON(request, sender, sendResponse) {
   });
 };
 
-chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-        var redirectUrl = details.url;
-
-        if (details.url.indexOf('tracers=') !== -1) {
-          return;
-        }
-
-        // Only add for HTML files
-        if (details.url.match(/.html/m)) {
-          if (details.url.indexOf('?') === -1) {
-            redirectUrl += '?tracers=oak-writes';
-          } else {
-            redirectUrl += '&tracers=oak-writes';
-          }
-
-          return { redirectUrl: redirectUrl };
-        }
-    },
-    { urls: ["<all_urls>"] },
-    ["blocking"]
-);
-
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function(details) {
     if (details.url.match(/.html/m)) {
@@ -58,6 +35,12 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         name: 'Sling-Tracer-Record',
         value: 'true'
       });
+
+      details.requestHeaders.push({
+        name: 'Sling-Tracers',
+        value: 'oak-writes,oak-query'
+      });
+
       return { requestHeaders: details.requestHeaders };
     }
   },
