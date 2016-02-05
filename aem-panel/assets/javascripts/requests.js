@@ -7,7 +7,6 @@ var requests = {
 
     chrome.devtools.network.onRequestFinished.addListener(function(chromeRequest) {
       var httpTransaction = createHTTPTransaction(chromeRequest);
-
       if (httpTransaction && httpTransaction.key) {
 
         if (chrome && chrome.runtime) {
@@ -22,9 +21,7 @@ var requests = {
               //$('.data-container').scrollTop(100000000);
             }
           );
-        } /*else {
-          panel.addData(httpTransaction, sampleJSON, scope);
-        }*/
+        }
       }
     });
   }

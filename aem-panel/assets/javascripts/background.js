@@ -1,3 +1,15 @@
+/** Options Initialization */
+if (!localStorage.getItem('aempanel.options')) {
+  localStorage.setItem('aempanel.options',
+      JSON.stringify({
+          user: 'admin',
+          password: 'admin',
+          tracerIds: 'oak-query,oak-writes',
+          host: 'http://localhost:4502'
+      })
+  );
+}
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.action === 'getSlingTracerJSON') {
@@ -7,11 +19,12 @@ chrome.runtime.onMessage.addListener(
 });
 
 function getSlingTracerJSON(request, sender, sendResponse) {
-  var callback = sendResponse,
+  var options = JSON.parse(localStorage.getItem('aempanel.options')),
+      callback = sendResponse,
       // Handle servlet context
-      url = 'http://localhost:4502/system/console/tracer/' + request.requestId + '.json',
-      username = 'admin',
-      password = 'admin';
+      url = options.host + '/system/console/tracer/' + request.requestId + '.json',
+      username = options.user,
+      password = options.password;
 
   console.log('Requesting Sling Tracer information @ ' + url);
 
@@ -22,7 +35,6 @@ function getSlingTracerJSON(request, sender, sendResponse) {
       xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
     },
     success: function(d) {
-      console.log(d);
       callback(d);
     }
   });
@@ -30,19 +42,19 @@ function getSlingTracerJSON(request, sender, sendResponse) {
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function(details) {
-    if (details.url.match(/.html/m)) {
-      details.requestHeaders.push({
-        name: 'Sling-Tracer-Record',
-        value: 'true'
-      });
+    var options = JSON.parse(localStorage.getItem('aempanel.options'));
 
-      details.requestHeaders.push({
-        name: 'Sling-Tracers',
-        value: 'oak-writes,oak-query'
-      });
+    details.requestHeaders.push({
+      name: 'Sling-Tracer-Record',
+      value: 'true'
+    });
 
-      return { requestHeaders: details.requestHeaders };
-    }
+    details.requestHeaders.push({
+      name: 'Sling-Tracers',
+      value: options.tracerIds
+    });
+
+    return { requestHeaders: details.requestHeaders };
   },
   { urls: ["<all_urls>"] },
   ['blocking', 'requestHeaders']
