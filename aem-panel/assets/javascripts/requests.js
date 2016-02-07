@@ -1,4 +1,10 @@
 /**
+ * Port used to communicate with background logic in background.js
+ */
+var port = chrome.runtime.connect({name: "aem-panel"});
+
+
+/**
  * Listen for Requests in the current window and process them accordingly.
  **/
 
@@ -24,6 +30,10 @@ var requests = {
         }
       }
     });
+
+    //Send message to enable tracer headers for *this* tab
+    port.postMessage({"action" : "register", "tabId" : chrome.devtools.inspectedWindow.tabId});
+
   }
 };
 
